@@ -1,0 +1,25 @@
+use_half: False
+use_ddp: False
+
+work_dir: ./result
+data_path: path/to/saved/lmdb
+data_meta: meta/train.json
+content_font: "0250_simple"
+
+
+batch_size: 1
+n_workers: 8
+comb_iter: 800000
+fact_iter: 50000
+g_lr: 2e-4
+d_lr: 8e-4
+ac_lr: 2e-4
+adam_betas: [0.0, 0.9]
+
+cv_n_unis: 30
+cv_n_fonts: 10
+
+print_freq: 1
+val_freq: 5
+save_freq: 5
+tb_freq: 10

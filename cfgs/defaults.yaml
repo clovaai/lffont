@@ -1,0 +1,92 @@
+use_half: False
+half_type: O2
+use_ddp: False
+port: 7890
+
+phase: comb
+overwrite: False
+
+work_dir: ./result
+batch_size: 20
+comb_iter: 800000
+fact_iter: 50000
+seed: 2
+g_lr: 2e-4
+d_lr: 8e-4
+ac_lr: 2e-4
+n_workers: 8
+adam_betas: [0.0, 0.9]
+init: kaiming
+
+n_comps: 371
+
+n_in_chars: 3
+n_each_chars: 3
+n_targets: 9
+
+n_shots: 8
+
+content_font: "0250_simple"
+language: "chn"
+
+data_path: /path/to/lmdb
+data_meta: meta/train.json
+dec_dict: meta/chn_decompose.json
+
+dset_args:
+  n_sample_min: 3
+  n_sample_max: 5
+dset_aug:
+  normalize: False
+  random_affine: False
+  
+cv_n_unis: 30
+cv_n_fonts: 10
+
+# model
+C: 64
+g_args:
+  comp_enc:
+    norm: none
+    activ: relu
+    pad_type: reflect
+    skip_scale_var: False
+  emb_block:
+    emb_dim:
+  dec:
+    norm: IN
+    activ: relu
+    pad_type: reflect
+    out: sigmoid
+  content_enc:
+    C_out: 0  # 0 -> do not use content guide
+    content_sigmoid: False
+d_args:
+  w_norm: spectral
+  activ: relu
+  gap_activ: relu
+  pad_type: reflect
+  res_scale_var: False
+ac_args:
+  norm: IN
+  activ: relu
+  pad_type: reflect
+  conv_dropout: 0.
+  clf_dropout: 0.
+
+# losses
+pixel_loss_type: l1
+pixel_w: 0.1
+gan_w: 1.0
+fm_layers: all
+fm_w: 1.0
+ac_w: 0.
+ac_gen_w: 0.
+dec_const_w: 0.
+
+# etc
+save: all-last
+print_freq: 1000
+val_freq: 10000
+save_freq: 50000
+tb_freq: 10

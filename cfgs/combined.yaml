@@ -1,0 +1,43 @@
+phase: comb
+
+C: 32
+batch_size: 8
+# gen
+g_args:
+  comp_enc:
+    norm: "in"
+    pad_type: zero
+    sigmoid: True
+  dec:
+    pad_type: zero
+  content_enc:  # Content encoder
+    norm: "in"
+    C_out: 256
+    content_sigmoid: False
+
+# disc
+d_args:
+  pad_type: zero
+
+# dset
+n_comps: 371
+
+dset_args:
+  n_sample_min: 3
+  n_sample_max: 5
+
+dset_aug:
+  normalize: True
+  random_affine: False
+  
+# AC
+ac_args:
+  norm: IN
+  conv_dropout: 0.3
+  clf_dropout: 0.2
+  pad_type: zero
+
+
+ac_w: 0.1
+ac_gen_w: 0.1
+
