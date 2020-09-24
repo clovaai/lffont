@@ -1,6 +1,6 @@
 # LF-Font
 
-Official PyTorch implementation of LF-Font | [paper](https://arxiv.org)
+Official PyTorch implementation of LF-Font | [paper](https://arxiv.org/abs/2009.11042)
 
 Song Park<sup>1*</sup>, Sanghyuk Chun<sup>2*</sup>, Junbum Cha<sup>2</sup>,
 Bado Lee<sup>2</sup>, Hyunjung Shim<sup>1</sup><br>
@@ -169,4 +169,11 @@ This project is based on [clovaai/dmfont](https://github.com/clovaai/dmfont).
 
 ## How to cite
 
-TBA
+```
+@article{park2020lffont,
+    title={Few-shot Font Generation with Localized Style Representations and Factorization},
+    author={Park, Song and Chun, Sanghyuk and Cha, Junbum and Lee, Bado and Shim, Hyunjung},
+    year={2020},
+    journal={arXiv preprint arXiv:2009.11042},
+}
+```
