@@ -50,7 +50,7 @@ def get_fact_test_loader(env, env_get, target_dict, ref_unis, cfg, avails, dec_d
         transform=transform,
         n_comps=int(cfg.n_comps),
         n_shots=int(cfg.n_shots),
-        ret_targets=True,
+        ret_targets=False,
     )
     loader = DataLoader(dset, batch_size=cfg.batch_size, collate_fn=dset.collate_fn, **kwargs)
 
