@@ -1,3 +1,8 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 import copy
 from tqdm import trange
 from itertools import chain

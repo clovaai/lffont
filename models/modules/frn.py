@@ -1,3 +1,8 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 from functools import partial
 import torch
 import torch.nn as nn

@@ -1,8 +1,12 @@
-from itertools import chain, product
-from functools import partial
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
+from itertools import chain
 import random
 
-from PIL import Image, ImageFile
+from PIL import ImageFile
 import numpy as np
 
 import torch
@@ -18,7 +22,7 @@ class FactTrainDataset(Dataset):
     def __init__(self, env, env_get, avails, decompose_dict, content_font, n_comps=371, n_in_chars=6, n_each_chars=3, n_targets=18, transform=None):
         self.env = env
         self.env_get = env_get
-        
+
         self.avails = avails
         self.fus = [(fname, uni) for fname, unis in self.avails.items() for uni in unis]
         self.unis = sorted(set.union(*map(set, self.avails.values())))
@@ -58,7 +62,7 @@ class FactTrainDataset(Dataset):
         picked_fonts = []
         picked_unis = []
         picked_comp_ids = []
-        
+
         for uni in picked_chars:
             avail_fonts = sorted(set(self.avails_rev[uni]) - {self.content_font})
             valid_fonts = random.sample(avail_fonts, self.n_each_chars)
@@ -90,7 +94,7 @@ class FactTrainDataset(Dataset):
         in_comp_ids = [[*filter(lambda x: x in trg_comp_ids_, comp_ids)] for comp_ids in in_comp_ids]
 
         in_set = [*zip(*filter(lambda x: x[2], [*zip(in_fonts, in_unis, in_comp_ids)]))]
-        
+
         if in_set:
             in_fonts, in_unis, in_comp_ids = in_set
         else:
@@ -113,7 +117,7 @@ class FactTrainDataset(Dataset):
         return list(in_fonts), list(in_unis), list(in_comp_ids), list(trg_fonts), list(trg_unis), list(trg_comp_ids)
 
     def __getitem__(self, index):
-        
+
         while True:
             (in_fonts, in_unis, in_comp_ids) = self.sample_input(self.n_in_chars)
 
@@ -139,7 +143,7 @@ class FactTrainDataset(Dataset):
 
             trg_uni_ids = [*map(self.unis.index, trg_unis)]
             in_comp_ids = [*map(torch.LongTensor, in_comp_ids)]
-            
+
             content_imgs = torch.cat([self.env_get(self.env, self.content_font, uni, self.transform) for uni in trg_unis])
 
             ret = (
@@ -152,7 +156,7 @@ class FactTrainDataset(Dataset):
                 trg_imgs,
                 content_imgs
             )
-            
+
             return ret
 
     def __len__(self):
@@ -187,25 +191,25 @@ class FactTestDataset(Dataset):
         self.fonts = list(target_fu)
         self.n_uni_per_font = len(target_fu[list(target_fu)[0]])
         self.fus = [(fname, uni) for fname, unis in target_fu.items() for uni in unis]
-        
+
         self.env = env
         self.env_get = env_get
-        
+
         self.avails = avails
         self.decompose_dict = decompose_dict
         self.n_comps = n_comps
-        self.n_shots = n_shots    
+        self.n_shots = n_shots
         self.ref_unis = ref_unis
-        
+
         self.transform = transform
         self.ret_targets = ret_targets
         self.content_font = content_font
-        
+
         to_int_dict = {"chn": lambda x: int(x, 16),
                        "kor": lambda x: ord(x),
                        "thai": lambda x: int("".join([f'{ord(each):04X}' for each in x]), 16)
                       }
-        
+
         self.to_int = to_int_dict[language.lower()]
 
     def __getitem__(self, index):
@@ -216,7 +220,7 @@ class FactTestDataset(Dataset):
             in_avail_unis = sorted(set(self.avails[trg_font]) - set(trg_uni))
         else:
             in_avail_unis = self.ref_unis
-            
+
         in_unis = sample(in_avail_unis, self.n_shots)
 
         trg_comp_ids = self.decompose_dict[trg_uni]

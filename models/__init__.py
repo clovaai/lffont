@@ -1,3 +1,8 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 # generators
 from .generator import Generator
 

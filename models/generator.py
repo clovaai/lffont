@@ -1,10 +1,14 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 import torch
 import torch.nn as nn
 from .comp_encoder import comp_enc_builder, decompose_block_builder
 from .content_encoder import content_enc_builder
 from .decoder import dec_builder
-from .memory import Memory, SingleMemory
-import copy
+from .memory import Memory
 
 
 class Generator(nn.Module):
@@ -34,7 +38,7 @@ class Generator(nn.Module):
         self.content_encoder = content_enc_builder(
             C_in, C, **content_enc
         )
-        
+
         self.decoder = dec_builder(
             C, C_out, **dec, C_content=C_content
         )
@@ -133,6 +137,6 @@ class Generator(nn.Module):
             raise NotImplementedError
 
         out = self.read_decode(trg_style_ids, trg_comp_ids, content_imgs=content_imgs,
-                              reduction=reduction, phase=phase, try_comb=try_comb)
+                               reduction=reduction, phase=phase, try_comb=try_comb)
 
         return out

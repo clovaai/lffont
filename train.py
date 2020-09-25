@@ -1,12 +1,13 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 import sys
-import json
-import copy
 from pathlib import Path
 import argparse
-import pickle
 
 import torch
-import torch.nn as nn
 
 import torch.optim as optim
 import torch.backends.cudnn as cudnn
@@ -21,7 +22,7 @@ from utils import Logger
 
 from models import generator_dispatch, disc_builder, aux_clf_builder
 from models.modules import weights_init
-from datasets import (uniform_sample, load_lmdb, load_json, read_data_from_lmdb,
+from datasets import (load_lmdb, load_json, read_data_from_lmdb,
                       get_comb_trn_loader, get_cv_comb_loaders, get_fact_trn_loader, get_cv_fact_loaders)
 
 from trainer import load_checkpoint, CombinedTrainer, FactorizeTrainer
@@ -41,13 +42,13 @@ def setup_args_and_config():
     cfg = Config(*args.config_paths, default="cfgs/defaults.yaml",
                  colorize_modified_item=True)
     cfg.argv_update(left_argv)
-    
+
     if cfg.use_ddp:
         cfg.n_workers = 0
 
     cfg.work_dir = Path(cfg.work_dir)
     cfg.work_dir.mkdir(parents=True, exist_ok=True)
-    
+
     if args.use_unique_name:
         timestamp = utils.timestamp()
         unique_name = "{}_{}".format(timestamp, args.name)
@@ -59,10 +60,10 @@ def setup_args_and_config():
 
     (cfg.work_dir / "logs").mkdir(parents=True, exist_ok=True)
     (cfg.work_dir / "checkpoints" / unique_name).mkdir(parents=True, exist_ok=True)
-    
+
     if cfg.save_freq % cfg.val_freq:
-        raise ValueError(f"save_freq has to be multiple of val_freq.")
-        
+        raise ValueError("save_freq has to be multiple of val_freq.")
+
     return args, cfg
 
 
@@ -137,7 +138,7 @@ def train(args, cfg, ddp_gpu=-1):
 
     env = load_lmdb(cfg.data_path)
     env_get = lambda env, x, y, transform: transform(read_data_from_lmdb(env, f'{x}_{y}')['img'])
-        
+
     data_meta = load_json(cfg.data_meta)
     dec_dict = load_json(cfg.dec_dict)
 

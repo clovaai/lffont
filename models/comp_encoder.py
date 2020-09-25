@@ -1,3 +1,8 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 import copy
 from functools import partial
 import torch.nn as nn
@@ -31,7 +36,7 @@ class ComponentEncoder(nn.Module):
     def forward(self, x, comp_id=None):
         x = x.repeat((1, 1, 1, 1))
         ret_feats = {}
-        
+
         for layer in self.body:
             if isinstance(layer, ComponentConditionBlock):
                 x = layer(x, comp_id)
@@ -41,9 +46,9 @@ class ComponentEncoder(nn.Module):
             x = layer(x)
             if lidx == self.skip_layer_idx:
                 ret_feats["skip"] = x
-                
+
         ret_feats["last"] = x
-        
+
         if self.sigmoid:
             ret_feats = {k: nn.Sigmoid()(v) for k, v in ret_feats.items()}
 
@@ -51,7 +56,7 @@ class ComponentEncoder(nn.Module):
 
 
 def comp_enc_builder(C_in, C, norm='none', activ='relu', pad_type='reflect', sigmoid=True, skip_scale_var=False, n_comps=None):
-    
+
     ConvBlk = partial(ConvBlock, norm=norm, activ=activ, pad_type=pad_type)
     ResBlk = partial(ResBlock, norm=norm, activ=activ, pad_type=pad_type, scale_var=skip_scale_var)
 
@@ -71,7 +76,7 @@ def comp_enc_builder(C_in, C, norm='none', activ='relu', pad_type='reflect', sig
         CBAM(C * 8),
         ResBlk(C * 8, C * 8)
     ]
-    
+
     skip_layer_idx = 2
 
     final_shape = (C*8, 16, 16)
@@ -81,7 +86,7 @@ def comp_enc_builder(C_in, C, norm='none', activ='relu', pad_type='reflect', sig
 
 
 def decompose_block_builder(emb_dim, in_shape, num_blocks=2):
-    
+
     blocks = [ParamBlock(emb_dim, (in_shape[0], 1, 1)) for _ in range(num_blocks)]
 
     return blocks

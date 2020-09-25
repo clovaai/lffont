@@ -1,3 +1,8 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 from functools import partial
 import torch.nn as nn
 from .modules import LinearBlock, ConvBlock, Flatten, ResBlock
@@ -12,10 +17,10 @@ class ContentEncoder(nn.Module):
     def forward(self, x):
         x = x.repeat((1, 1, 1, 1))
         out = self.net(x)
-        
+
         if self.sigmoid:
             out = nn.Sigmoid()(out)
-            
+
         return out
 
 

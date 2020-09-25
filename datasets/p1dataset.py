@@ -1,7 +1,12 @@
-from itertools import chain, product
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
+from itertools import chain
 import copy
 
-from PIL import Image, ImageFile
+from PIL import ImageFile
 import numpy as np
 import random
 
@@ -16,26 +21,26 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 class CombTrainDataset(Dataset):
     def __init__(self, env, env_get, avails, decompose_dict, content_font, n_comps=371, n_pick=3,
                  n_sample_min=1, n_sample_max=999, transform=None):
-        self.env = env 
+        self.env = env
         self.env_get = env_get
-        
+
         self.avails = avails
         self.unis = sorted(set.union(*map(set, self.avails.values())))
         self.fonts = list(self.avails)
         self.n_unis = len(self.unis)
         self.n_fonts = len(self.fonts)
-        
+
         self.avails_rev = {}
         for fname, unilist in self.avails.items():
             for uni in unilist:
                 self.avails_rev.setdefault(uni, []).append(fname)
-                
+
         self.decompose_dict = decompose_dict
         self.n_comps = n_comps
         self.n_pick = n_pick
         self.n_sample_min = n_sample_min
         self.n_sample_max = n_sample_max
-        
+
         self.transform = transform
         self.content_font = content_font
 
@@ -74,7 +79,7 @@ class CombTrainDataset(Dataset):
             uni_comps = sample(uni_comps, self.n_sample_max)
         elif n_sample < self.n_sample_min:
             return None, None
-        
+
         uni_comps = list(zip(*uni_comps))
         return uni_comps
 
@@ -82,7 +87,7 @@ class CombTrainDataset(Dataset):
         font_idx = index % self.n_fonts
         font_name = self.fonts[font_idx]
         while True:
-            (style_imgs, style_unis, style_comp_ids) = self.sample_style(font_name, n_pick=self.n_pick) 
+            (style_imgs, style_unis, style_comp_ids) = self.sample_style(font_name, n_pick=self.n_pick)
 
             avail_unis = set(self.avails[font_name]) - set(style_unis)
             trg_unis, trg_comp_ids = self.get_available_combinations(avail_unis, style_comp_ids)
@@ -90,13 +95,13 @@ class CombTrainDataset(Dataset):
             if trg_unis is None:
                 continue
 
-            trg_imgs = torch.cat([self.env_get(self.env, font_name, uni, self.transform) 
+            trg_imgs = torch.cat([self.env_get(self.env, font_name, uni, self.transform)
                                   for uni in trg_unis])
             trg_uni_ids = [self.unis.index(uni) for uni in trg_unis]
-            
+
             style_comp_ids = [*map(torch.LongTensor, style_comp_ids)]
             font_idx = torch.LongTensor([font_idx])
-            content_imgs = torch.cat([self.env_get(self.env, self.content_font, uni, self.transform) 
+            content_imgs = torch.cat([self.env_get(self.env, self.content_font, uni, self.transform)
                                       for uni in trg_unis]).unsqueeze_(1)
 
             ret = (
@@ -145,10 +150,10 @@ class CombTestDataset(Dataset):
         self.fonts = list(target_fu)
         self.n_uni_per_font = len(target_fu[list(target_fu)[0]])
         self.fus = [(fname, uni) for fname, unis in target_fu.items() for uni in unis]
-        
+
         self.env = env
         self.env_get = env_get
-        
+
         self.avails = avails
         self.decompose_dict = decompose_dict
         self.comp_dict = {}
@@ -162,12 +167,12 @@ class CombTestDataset(Dataset):
         self.transform = transform
         self.ret_targets = ret_targets
         self.content_font = content_font
-        
+
         to_int_dict = {"chn": lambda x: int(x, 16),
                        "kor": lambda x: ord(x),
                        "thai": lambda x: int("".join([f'{ord(each):04X}' for each in x]), 16)
                       }
-        
+
         self.to_int = to_int_dict[language.lower()]
 
     def sample_char(self, font_name, trg_uni):
@@ -194,7 +199,7 @@ class CombTestDataset(Dataset):
 
         font_idx = torch.LongTensor([font_idx])
         trg_dec_uni = torch.LongTensor([self.to_int(trg_uni)])
-        
+
         content_img = self.env_get(self.env, self.content_font, trg_uni, self.transform)
 
         ret = (
@@ -231,59 +236,59 @@ class CombTestDataset(Dataset):
             torch.cat(trg_unis),
             torch.cat(content_imgs).unsqueeze_(1)
         )
-        
+
         if left:
             trg_imgs = left[0]
             ret += (torch.cat(trg_imgs).unsqueeze_(1),)
 
         return ret
-    
-    
+
+
 class FixedRefDataset(Dataset):
     def __init__(self, env, env_get, target_dict, ref_unis, decompose_dict, content_font, language="chn", rep_content=False,
                  decompose=False, transform=None, ret_targets=True):
 
         self.target_dict = target_dict
         self.fus = [(fname, uni) for fname, unis in target_dict.items() for uni in unis]
-        
+
         self.ref_unis = ref_unis
         self.n_chars = min([len(ref_unis), 8])
         self.decompose_dict = decompose_dict
         self.decompose = decompose
         self.rep_content = rep_content
-        
+
         self.comp_unis = {}
         for uni in self.ref_unis:
             decomposed = self.decompose_dict[uni]
             for comp_id in decomposed:
                 self.comp_unis.setdefault(comp_id, [])
                 self.comp_unis[comp_id].append(uni)
-                
+
         self.content_font = content_font
         self.fonts = list(target_dict) + [content_font]
-        
+
         self.env = env
         self.env_get = env_get
-        
+
         self.transform = transform
         self.ret_targets = ret_targets
-        
+
         to_int_dict = {"chn": lambda x: int(x, 16),
                        "kor": lambda x: ord(x),
                        "thai": lambda x: int("".join([f'{ord(each):04X}' for each in x]), 16)
                       }
-        
+
         self.to_int = to_int_dict[language.lower()]
 
 
     def sample_char(self, fname, trg_uni):
         style_comp_ids = copy.copy(self.decompose_dict[trg_uni])
-        
+
         style_fonts = []
         style_unis = []
-        
+
         n_valid_uni = 0
-        
+
         for comp in style_comp_ids:
             if comp in self.comp_unis:
                 _font = fname
@@ -297,7 +302,7 @@ class FixedRefDataset(Dataset):
                 else:
                     _font = self.content_font
                     _uni = trg_uni
-            
+
             style_fonts.append(_font)
             style_unis.append(_uni)
 
@@ -315,7 +320,7 @@ class FixedRefDataset(Dataset):
     def __getitem__(self, index):
         fname, trg_uni = self.fus[index]
         trg_comp_ids = self.decompose_dict[trg_uni]
-        
+
         fidx = self.fonts.index(fname)
 
         style_fonts, style_unis, style_comp_ids = self.sample_char(fname, trg_uni)
@@ -325,7 +330,7 @@ class FixedRefDataset(Dataset):
             fidces = torch.LongTensor([*map(self.fonts.index, style_fonts)])
         else:
             fidces = torch.LongTensor([fidx]).repeat(len(style_fonts))
-        
+
         trg_dec_uni = torch.LongTensor([self.to_int(trg_uni)])
         content_img = self.env_get(self.env, self.content_font, trg_uni, self.transform)
 

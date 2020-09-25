@@ -1,10 +1,14 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 import argparse
 import json
 import io
 
 import lmdb
 from PIL import Image, ImageFont, ImageDraw
-from fontTools.ttLib import TTFont
 from tqdm import tqdm
 
 
@@ -33,10 +37,10 @@ def render(char, font, size=(128, 128), pad=20, pad_h=None):
 
 
 def save_lmdb(env_path, font_path_char_dict):
-    
+
     env = lmdb.open(env_path, map_size=1024 ** 4)
     valid_dict = {}
-    
+
     for fname in tqdm(font_path_char_dict):
         fontpath = font_path_char_dict[fname]["path"]
         charlist = font_path_char_dict[fname]["charlist"]
@@ -55,9 +59,9 @@ def save_lmdb(env_path, font_path_char_dict):
 
             with env.begin(write=True) as txn:
                 txn.put(lmdb_key, img)
-                
+
         valid_dict[fname] = unilist
-        
+
     return valid_dict
 
 
@@ -68,14 +72,14 @@ def main():
     parser.add_argument("--meta_path", help="path to meta file: {fname: {'path': /path/to/ttf.ttf, 'charlist': [available chars]}.")
 
     args = parser.parse_args()
-    
+
     with open(args.meta_path) as f:
         fpc_meta = json.load(f)
-    
+
     valid_dict = save_lmdb(args.lmdb_path, fpc_meta)
     with open(args.json_path, "w") as f:
         json.dump(valid_dict, f)
 
-        
+
 if __name__ == "__main__":
     main()

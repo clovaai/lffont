@@ -1,22 +1,15 @@
-import os
-import sys
-from itertools import chain
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 from pathlib import Path
-import pickle
-import json
-import re
-import random
 
-import numpy as np
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from torchvision import transforms
-from tqdm import tqdm
 
 import utils
 from utils import Logger
-from datasets import uniform_sample, load_lmdb, read_data_from_lmdb
+from datasets import load_lmdb, read_data_from_lmdb
 
 
 def torch_eval(val_fn):
@@ -108,10 +101,11 @@ class Evaluator:
                 path = save_dir / font_name / "{}_{}.png".format(font_name, uni)
                 utils.save_tensor_to_image(image, path)
 
+
 def eval_ckpt():
     import argparse
     from models import generator_dispatch
-    from sconf import Config, dump_args
+    from sconf import Config
     from train import setup_transforms
     from datasets import load_json, get_fact_test_loader
 
@@ -126,14 +120,14 @@ def eval_ckpt():
 
     cfg = Config(*args.config_paths, default="cfgs/defaults.yaml")
     cfg.argv_update(left_argv)
-        
+
     content_font = cfg.content_font
     n_comps = int(cfg.n_comps)
     trn_transform, val_transform = setup_transforms(cfg)
 
     env = load_lmdb(cfg.data_path)
     env_get = lambda env, x, y, transform: transform(read_data_from_lmdb(env, f'{x}_{y}')['img'])
-        
+
     test_meta = load_json(args.test_meta)
     dec_dict = load_json(cfg.dec_dict)
 
@@ -157,12 +151,12 @@ def eval_ckpt():
                           val_transform,
                           content_font
                           )
-        
+
     img_dir = Path(args.img_dir)
     ref_unis = test_meta["ref_unis"]
     gen_unis = test_meta["gen_unis"]
     gen_fonts = test_meta["gen_fonts"]
-    target_dict = {f:gen_unis for f in gen_fonts}
+    target_dict = {f: gen_unis for f in gen_fonts}
 
     loader = get_fact_test_loader(env,
                                   env_get,
@@ -182,4 +176,3 @@ def eval_ckpt():
 
 if __name__ == "__main__":
     eval_ckpt()
-    

@@ -1,8 +1,12 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 from functools import partial
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-from .modules import ResBlock, ConvBlock, w_norm_dispatch, activ_dispatch, pad_dispatch
+from .modules import ResBlock, ConvBlock, w_norm_dispatch, activ_dispatch
 
 
 class ProjectionDiscriminator(nn.Module):
@@ -65,7 +69,7 @@ class CustomDiscriminator(nn.Module):
             x = layer(x)
             feats.append(x)
 
-        x = self.gap(x) # final features
+        x = self.gap(x)  # final features
         ret = self.projD(x, font_indice, char_indice)
 
         if out_feats == 'all':
@@ -82,12 +86,12 @@ def disc_builder(C, n_fonts, n_chars, activ='relu', gap_activ='relu', w_norm='sp
         ResBlock, w_norm=w_norm, activ=activ, pad_type=pad_type, scale_var=res_scale_var
     )
     feats = [
-        ConvBlk(1, C, stride=2, activ='none'), # 64x64 (stirde==2)
+        ConvBlk(1, C, stride=2, activ='none'),  # 64x64 (stirde==2)
         ResBlk(C*1, C*2, downsample=True),    # 32x32
         ResBlk(C*2, C*4, downsample=True),    # 16x16
         ResBlk(C*4, C*8, downsample=True),    # 8x8
         ResBlk(C*8, C*16, downsample=False),  # 8x8
-        ResBlk(C*16, C*16, downsample=False), # 8x8
+        ResBlk(C*16, C*16, downsample=False),  # 8x8
     ]
 
     gap_activ = activ_dispatch(gap_activ)

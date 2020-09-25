@@ -1,4 +1,8 @@
-""" Auxiliary component classifier """
+""" Auxiliary component classifier
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 from functools import partial
 import torch.nn as nn
 from .modules import LinearBlock, ConvBlock, ResBlock, Flatten

@@ -1,3 +1,8 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 import copy
 from functools import partial
 import torch
@@ -11,7 +16,7 @@ class Integrator(nn.Module):
         super().__init__()
         C_in = (C_in or C) + C_content
         self.integrate_layer = ConvBlock(C_in, C, 1, 1, 0, norm=norm, activ=activ)
-        
+
     def forward(self, comps, x=None, content=None):
         """
         Args:

@@ -1,3 +1,8 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 import torch
 
 from .base_trainer import BaseTrainer
@@ -78,7 +83,7 @@ class CombinedTrainer(BaseTrainer):
             ##############################################################
             sc_feats = self.gen.encode_write_comb(in_style_ids, in_comp_ids, in_imgs)
             ac_feats = sc_feats
-            
+
             out = self.gen.read_decode(trg_style_ids, trg_comp_ids, content_imgs, phase="comb")
 
             trg_uni_disc_ids = trg_uni_ids.cuda()
