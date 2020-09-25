@@ -16,7 +16,7 @@ import utils
 from datasets import cyclize
 from models import memory
 from .trainer_utils import *
-
+from pathlib import Path
 try:
     from apex import amp
 except ImportError:
@@ -223,7 +223,7 @@ class BaseTrainer:
         ckpt_dir = self.cfg['work_dir'] / "checkpoints" / self.cfg['unique_name']
         step_ckpt_name = "{:06d}-{}.pth".format(self.step, self.cfg['name'])
         last_ckpt_name = "last.pth"
-        step_ckpt_path = ckpt_dir / step_ckpt_name
+        step_ckpt_path = Path.cwd() /ckpt_dir / step_ckpt_name
         last_ckpt_path = ckpt_dir / last_ckpt_name
 
         log = ""
