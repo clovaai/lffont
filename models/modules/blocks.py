@@ -1,3 +1,8 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 from functools import partial
 import numpy as np
 import torch
@@ -71,7 +76,7 @@ class ParamBlock(nn.Module):
         self.shape = shape
         self.w = nn.Parameter(w)
         self.b = nn.Parameter(b)
-        
+
     def forward(self, x):
         b = self.b.reshape((1, *self.b.shape, 1, 1, 1)).repeat(x.size(0), 1, *self.shape)
         return self.w*x + b

@@ -1,3 +1,8 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 from pathlib import Path
 import torch.nn.functional as F
 from . import save_tensor_to_image

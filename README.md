@@ -45,6 +45,8 @@ conda install numpy tqdm lmdb ruamel.yaml jsonlib-python3 msgpack
 	* **structure**: *dict*
 	* **format**: {fontname: {"path": path/to/.ttf", "charlist": [chars to dump.]}}
 	* **example**: {"font1": {"path": "./fonts/font1.ttf", "charlist": ["春", "夏", "秋", "冬"]}}
+	
+The font file we used as the _content font_ can be accessed [here](https://chinesefontdesign.com/font-housekeeper-song-ming-typeface-chinese-font-simplified-chinese-fonts.html).
 
 #### Run script
 ```

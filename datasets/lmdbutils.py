@@ -1,11 +1,14 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 import io
 import os
 
 import lmdb
 import json
 from PIL import Image, ImageFile
-import msgpack
-import numpy as np
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -26,7 +29,7 @@ def load_lmdb(lmdb_path):
 def load_json(json_path):
     with open(json_path) as f:
         meta = json.load(f)
-        
+
     return meta
 
 

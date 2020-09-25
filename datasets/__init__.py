@@ -1,3 +1,8 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 import torch
 import random
 from .lmdbutils import (load_lmdb, load_json, read_data_from_lmdb)
@@ -97,7 +102,7 @@ def get_comb_test_loader(env, env_get, target_dict, cfg, avails, dec_dict, trans
 
 def get_fixedref_loader(env, env_get, decompose, target_dict, ref_unis, rep_content, cfg, dec_dict, transform, **kwargs):
     #  avail_fonts = [os.path.splitext(name)[0] + '.ttf' for name in avail_fonts]
-        
+
     print([chr(int(uni, 16)) for uni in ref_unis])
 
     dset = FixedRefDataset(env,
@@ -121,11 +126,11 @@ def get_fixedref_loader(env, env_get, decompose, target_dict, ref_unis, rep_cont
 def get_cv_comb_loaders(env, env_get, cfg, data_meta, dec_dict, transform, **kwargs):
     n_unis = cfg.cv_n_unis
     n_fonts = cfg.cv_n_fonts
-    
+
     ufs = uniform_sample(data_meta["test"]["unseen_fonts"], n_fonts)
     sfs = uniform_sample(data_meta["test"]["seen_fonts"], n_fonts)
-    sus = uniform_sample(data_meta["test"]["seen_unis"], n_unis) 
-    uus = uniform_sample(data_meta["test"]["unseen_unis"], n_unis) 
+    sus = uniform_sample(data_meta["test"]["seen_unis"], n_unis)
+    uus = uniform_sample(data_meta["test"]["unseen_unis"], n_unis)
 
     sfuu_dict = {fname: uus for fname in sfs}
     ufsu_dict = {fname: sus for fname in ufs}
@@ -142,20 +147,20 @@ def get_cv_comb_loaders(env, env_get, cfg, data_meta, dec_dict, transform, **kwa
 def get_cv_fact_loaders(env, env_get, cfg, data_meta, dec_dict, transform, ref_unis=None, **kwargs):
     n_unis = cfg.cv_n_unis
     n_fonts = cfg.cv_n_fonts
-    
+
     ufs = uniform_sample(data_meta["test"]["unseen_fonts"], n_fonts)
     sfs = uniform_sample(data_meta["test"]["seen_fonts"], n_fonts)
-    sus = uniform_sample(data_meta["test"]["seen_unis"], n_unis) 
-    uus = uniform_sample(data_meta["test"]["unseen_unis"], n_unis) 
+    sus = uniform_sample(data_meta["test"]["seen_unis"], n_unis)
+    uus = uniform_sample(data_meta["test"]["unseen_unis"], n_unis)
 
     sfuu_dict = {fname: uus for fname in sfs}
     ufsu_dict = {fname: sus for fname in ufs}
     ufuu_dict = {fname: uus for fname in ufs}
-    
+
     if ref_unis is None:
         ref_unis = sorted(set(data_meta["test"]["unseen_unis"]) - set(uus))[:cfg["n_shots"]]
-    
-    
+
+
     cv_loaders = {"sfuu": get_fact_test_loader(env, env_get, sfuu_dict, ref_unis, cfg, data_meta["valid"],
                                          dec_dict, transform, **kwargs)[1],
                   "ufsu": get_fact_test_loader(env, env_get, ufsu_dict, ref_unis, cfg, data_meta["valid"],

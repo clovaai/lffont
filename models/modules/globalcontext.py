@@ -1,3 +1,8 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 import torch
 import torch.nn as nn
 import torch.nn.functional as F

@@ -1,5 +1,9 @@
+"""
+LF-Font
+Copyright (c) 2020-present NAVER Corp.
+MIT license
+"""
 import numpy as np
-import torch
 
 
 def cyclize(loader):
@@ -13,7 +17,7 @@ def uniform_indice(end, n_sample, duplicate=False, st=None):
     """ Sample from [0, end) with (almost) equidistant interval """
     if end <= 0:
         return np.empty(0, dtype=np.int)
-    
+
     if not duplicate and n_sample > end:
         n_sample = end
 
@@ -36,10 +40,10 @@ def sample(population, n_sample, exception=None, seed=None):
         population = set(population) - set(exception)
     if not isinstance(population, np.ndarray):
         population = np.asarray(list(population))
-        
+
     replace = len(population) < n_sample
     ids = np.random.choice(len(population), size=n_sample, replace=replace)
-    
+
     return population[ids]
 
 
@@ -49,7 +53,7 @@ def uniform_sample(population, n_sample, st=None):
     N = len(population)
     if n_sample is None:
         return population
-    
+
     indice = uniform_indice(N, n_sample, st)
 
     if isinstance(population, np.ndarray):
