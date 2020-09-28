@@ -78,7 +78,7 @@ class Evaluator:
         save_dir.mkdir(parents=True, exist_ok=True)
 
         for i, (in_style_ids, in_comp_ids, in_imgs, trg_style_ids, trg_comp_ids,
-                trg_unis, content_imgs, trg_imgs) in enumerate(loader):
+                trg_unis, content_imgs) in enumerate(loader):
 
             if self.use_half:
                 in_imgs = in_imgs.half()
