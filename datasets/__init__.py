@@ -148,24 +148,24 @@ def get_cv_fact_loaders(env, env_get, cfg, data_meta, dec_dict, transform, ref_u
     n_unis = cfg.cv_n_unis
     n_fonts = cfg.cv_n_fonts
 
-    ufs = uniform_sample(data_meta["test"]["unseen_fonts"], n_fonts)
-    sfs = uniform_sample(data_meta["test"]["seen_fonts"], n_fonts)
-    sus = uniform_sample(data_meta["test"]["seen_unis"], n_unis)
-    uus = uniform_sample(data_meta["test"]["unseen_unis"], n_unis)
+    ufs = uniform_sample(data_meta["valid"]["unseen_fonts"], n_fonts)
+    sfs = uniform_sample(data_meta["valid"]["seen_fonts"], n_fonts)
+    sus = uniform_sample(data_meta["valid"]["seen_unis"], n_unis)
+    uus = uniform_sample(data_meta["valid"]["unseen_unis"], n_unis)
 
     sfuu_dict = {fname: uus for fname in sfs}
     ufsu_dict = {fname: sus for fname in ufs}
     ufuu_dict = {fname: uus for fname in ufs}
 
     if ref_unis is None:
-        ref_unis = sorted(set(data_meta["test"]["unseen_unis"]) - set(uus))[:cfg["n_shots"]]
+        ref_unis = sorted(set(data_meta["valid"]["unseen_unis"]) - set(uus))[:cfg["n_shots"]]
 
 
-    cv_loaders = {"sfuu": get_fact_test_loader(env, env_get, sfuu_dict, ref_unis, cfg, data_meta["valid"],
+    cv_loaders = {"sfuu": get_fact_test_loader(env, env_get, sfuu_dict, ref_unis, cfg, data_meta["avail"],
                                          dec_dict, transform, **kwargs)[1],
-                  "ufsu": get_fact_test_loader(env, env_get, ufsu_dict, ref_unis, cfg, data_meta["valid"],
+                  "ufsu": get_fact_test_loader(env, env_get, ufsu_dict, ref_unis, cfg, data_meta["avail"],
                                          dec_dict, transform, **kwargs)[1],
-                  "ufuu": get_fact_test_loader(env, env_get, ufuu_dict, ref_unis, cfg, data_meta["valid"],
+                  "ufuu": get_fact_test_loader(env, env_get, ufuu_dict, ref_unis, cfg, data_meta["avail"],
                                          dec_dict, transform, **kwargs)[1]
                   }
 
