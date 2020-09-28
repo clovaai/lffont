@@ -1,3 +1,7 @@
+"""
+Original code: https://github.com/NVlabs/FUNIT/blob/master/trainer.py
+"""
+
 import numpy as np
 import torch
 import torch.nn as nn

@@ -1,3 +1,7 @@
+"""
+Original code: https://github.com/Jongchan/attention-module/blob/master/MODELS/cbam.py 
+"""
+
 import torch
 import math
 import torch.nn as nn
