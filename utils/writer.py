@@ -33,7 +33,7 @@ class DiskWriter(Writer):
 
 class TBWriter(Writer):
     def __init__(self, dir_path, scale=None):
-        from tensorboardX import SummaryWriter
+        from torch.utils.tensorboard import SummaryWriter
         self.writer = SummaryWriter(dir_path, flush_secs=30)
         self.scale = scale
 
