@@ -166,6 +166,7 @@ def eval_ckpt():
                                   None,
                                   dec_dict,
                                   val_transform,
+                                  ret_targets=False,
                                   num_workers=cfg.n_workers,
                                   shuffle=False
                                   )[1]
