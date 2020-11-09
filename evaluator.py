@@ -58,7 +58,7 @@ class Evaluator:
         trgs = []
 
         for i, (in_style_ids, in_comp_ids, in_imgs, trg_style_ids, trg_comp_ids,
-                trg_unis, content_imgs, trg_imgs) in enumerate(loader):
+                trg_unis, content_imgs, *trg_imgs) in enumerate(loader):
 
             if self.use_half:
                 in_imgs = in_imgs.half()
@@ -68,9 +68,14 @@ class Evaluator:
                             content_imgs, phase, reduction=reduction)
 
             outs.append(out.detach().cpu())
-            trgs.append(trg_imgs.detach().cpu())
+            if trg_imgs:
+                trgs.append(trg_imgs.detach().cpu())
 
-        return torch.cat(outs).float(), torch.cat(trgs).float()
+        ret = (torch.cat(outs).float(),)
+        if trgs:
+            ret += (torch.cat(trgs).float(),)
+
+        return ret
 
     @torch_eval
     def save_each_imgs(self, gen, loader, save_dir, phase, reduction='mean'):

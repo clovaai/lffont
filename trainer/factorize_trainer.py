@@ -233,4 +233,4 @@ class FactorizeTrainer(BaseTrainer):
             "  R_font {D.real_font_acc.avg:7.3f}  F_font {D.fake_font_acc.avg:7.3f}"
             "  R_uni {D.real_uni_acc.avg:7.3f}  F_uni {D.fake_uni_acc.avg:7.3f}"
             "  B_stl {S.B_style.avg:5.1f}  B_trg {S.B_target.avg:5.1f}"
-                .format(step=self.step, L=losses, D=discs, S=stats))
+            .format(step=self.step, L=losses, D=discs, S=stats))

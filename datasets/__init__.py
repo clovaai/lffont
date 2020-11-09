@@ -37,7 +37,7 @@ def get_fact_trn_loader(env, env_get, cfg, train_dict, dec_dict, transform, **kw
     return dset, loader
 
 
-def get_fact_test_loader(env, env_get, target_dict, ref_unis, cfg, avails, dec_dict, transform, **kwargs):
+def get_fact_test_loader(env, env_get, target_dict, ref_unis, cfg, avails, dec_dict, transform, ret_targets=True, **kwargs):
     dset = FactTestDataset(
         env,
         env_get,
@@ -50,7 +50,7 @@ def get_fact_test_loader(env, env_get, target_dict, ref_unis, cfg, avails, dec_d
         transform=transform,
         n_comps=int(cfg.n_comps),
         n_shots=int(cfg.n_shots),
-        ret_targets=True,
+        ret_targets=ret_targets,
     )
     loader = DataLoader(dset, batch_size=cfg.batch_size, collate_fn=dset.collate_fn, **kwargs)
 
@@ -66,7 +66,7 @@ def get_comb_trn_loader(env, env_get, cfg, train_dict, dec_dict, transform, **kw
         dec_dict,
         content_font=cfg.content_font,
         **cfg.get('dset_args', {}),
-        transform = transform,
+        transform=transform,
     )
     if cfg.use_ddp:
         sampler = torch.utils.data.distributed.DistributedSampler(dset)
@@ -80,7 +80,7 @@ def get_comb_trn_loader(env, env_get, cfg, train_dict, dec_dict, transform, **kw
     return dset, loader
 
 
-def get_comb_test_loader(env, env_get, target_dict, cfg, avails, dec_dict, transform, **kwargs):
+def get_comb_test_loader(env, env_get, target_dict, cfg, avails, dec_dict, transform, ret_targets=True, **kwargs):
     #  avail_fonts = [os.path.splitext(name)[0] + '.ttf' for name in avail_fonts]
     dset = CombTestDataset(
         env,
@@ -92,7 +92,7 @@ def get_comb_test_loader(env, env_get, target_dict, cfg, avails, dec_dict, trans
         language=cfg.language,
         transform=transform,
         n_comps=int(cfg.n_comps),
-        ret_targets=True
+        ret_targets=ret_targets
     )
     loader = DataLoader(dset, batch_size=cfg.batch_size,
                         collate_fn=dset.collate_fn, **kwargs)
@@ -106,17 +106,17 @@ def get_fixedref_loader(env, env_get, decompose, target_dict, ref_unis, rep_cont
     print([chr(int(uni, 16)) for uni in ref_unis])
 
     dset = FixedRefDataset(env,
-                       env_get,
-                       target_dict,
-                       ref_unis,
-                       rep_content=rep_content,
-                       decompose=decompose,
-                       content_font=cfg.content_font,
-                       language=cfg.language,
-                       decompose_dict=dec_dict,
-                       transform=transform,
-                       ret_targets=True
-                    )
+                           env_get,
+                           target_dict,
+                           ref_unis,
+                           rep_content=rep_content,
+                           decompose=decompose,
+                           content_font=cfg.content_font,
+                           language=cfg.language,
+                           decompose_dict=dec_dict,
+                           transform=transform,
+                           ret_targets=True
+                           )
     loader = DataLoader(dset, batch_size=cfg.batch_size,
                         collate_fn=dset.collate_fn, **kwargs)
 
@@ -160,13 +160,12 @@ def get_cv_fact_loaders(env, env_get, cfg, data_meta, dec_dict, transform, ref_u
     if ref_unis is None:
         ref_unis = sorted(set(data_meta["valid"]["unseen_unis"]) - set(uus))[:cfg["n_shots"]]
 
-
     cv_loaders = {"sfuu": get_fact_test_loader(env, env_get, sfuu_dict, ref_unis, cfg, data_meta["avail"],
-                                         dec_dict, transform, **kwargs)[1],
+                                               dec_dict, transform, **kwargs)[1],
                   "ufsu": get_fact_test_loader(env, env_get, ufsu_dict, ref_unis, cfg, data_meta["avail"],
-                                         dec_dict, transform, **kwargs)[1],
+                                               dec_dict, transform, **kwargs)[1],
                   "ufuu": get_fact_test_loader(env, env_get, ufuu_dict, ref_unis, cfg, data_meta["avail"],
-                                         dec_dict, transform, **kwargs)[1]
+                                               dec_dict, transform, **kwargs)[1]
                   }
 
     return cv_loaders
