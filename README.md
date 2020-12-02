@@ -1,4 +1,4 @@
-# LF-Font
+# Few-shot Font Generation with Localized Style Representations and Factorization (AAAI 2021)
 
 Official PyTorch implementation of LF-Font | [paper](https://arxiv.org/abs/2009.11042)
 
@@ -172,10 +172,10 @@ This project is based on [clovaai/dmfont](https://github.com/clovaai/dmfont).
 ## How to cite
 
 ```
-@article{park2020lffont,
+@inproceedings{park2021lffont,
     title={Few-shot Font Generation with Localized Style Representations and Factorization},
     author={Park, Song and Chun, Sanghyuk and Cha, Junbum and Lee, Bado and Shim, Hyunjung},
-    year={2020},
-    journal={arXiv preprint arXiv:2009.11042},
+    year={2021},
+    booktitle={AAAI Conference on Artificial Intelligence},
 }
 ```
