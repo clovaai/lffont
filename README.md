@@ -130,15 +130,15 @@ python evaluator.py \
     cfgs/factorize.yaml \
     --weight weight/generator.pth \
     --img_dir path/to/save/images \
-    --data_path path/to/data \
-    --test_meta meta/test.json
+    --test_meta meta/test.json \
+    --data_path path/to/data
 ```
 * **arguments**
   * path/to/config (first argument): path to configration file.
   * \-\-weight : path to saved weight to test.
   * \-\-img_dir: path to save generated images.
-  * \-\-data_path: path to lmdb dataset which contatins the reference images.
   * \-\-test_meta: path to test meta file.
+  * \-\-data_path: path to lmdb dataset which contatins the reference images.
 
 ## Code license
 
