@@ -141,11 +141,11 @@ def eval_ckpt():
     gen = g_cls(1, cfg['C'], 1, **g_kwargs, n_comps=n_comps)
     gen.cuda()
 
-    weight = torch.load(args.weight)
-    if "generator_ema" in weight:
-        weight = weight["generator_ema"]
-    gen.load_state_dict(weight)
-    logger.info(f"Resumed checkpoint from {args.weight}")
+    #  weight = torch.load(args.weight)
+    #  if "generator_ema" in weight:
+        #  weight = weight["generator_ema"]
+    #  gen.load_state_dict(weight)
+    #  logger.info(f"Resumed checkpoint from {args.weight}")
     writer = None
 
     evaluator = Evaluator(env,
@@ -177,7 +177,7 @@ def eval_ckpt():
                                   )[1]
 
     logger.info("Save CV results to {} ...".format(img_dir))
-    evaluator.save_each_imgs(gen, loader, save_dir=img_dir, phase="fact", reduction='mean')
+    evaluator.save_each_imgs(gen, loader, save_dir=img_dir, phase=cfg.phase, reduction='mean')
 
 
 if __name__ == "__main__":
