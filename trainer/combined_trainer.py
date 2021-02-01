@@ -189,19 +189,19 @@ class CombinedTrainer(BaseTrainer):
         self.ac_losses['ac'] = loss * self.cfg['ac_w']
         stats.ac_acc.update(acc, in_comp_ids.numel())
 
-        enc = self.frozen_enc
-        enc.load_state_dict(self.gen.component_encoder.state_dict())
-
-        trg_comp_lens = torch.LongTensor([*map(len, trg_comp_ids)]).cuda()
-        trg_comp_ids = torch.LongTensor([*chain(*trg_comp_ids)]).cuda()
-        generated = generated.repeat_interleave(trg_comp_lens, dim=0)
-
-        feats = enc(generated, trg_comp_ids)
-        gen_comp_feats = feats["last"]
-
-        aux_gen_feats, loss, acc = self.infer_ac(gen_comp_feats, trg_comp_ids)
-        stats.ac_gen_acc.update(acc, trg_comp_ids.numel())
         if self.cfg['ac_gen_w'] > 0.:
+            enc = self.frozen_enc
+            enc.load_state_dict(self.gen.component_encoder.state_dict())
+
+            trg_comp_lens = torch.LongTensor([*map(len, trg_comp_ids)]).cuda()
+            trg_comp_ids = torch.LongTensor([*chain(*trg_comp_ids)]).cuda()
+            generated = generated.repeat_interleave(trg_comp_lens, dim=0)
+
+            feats = enc(generated, trg_comp_ids)
+            gen_comp_feats = feats["last"]
+
+            aux_gen_feats, loss, acc = self.infer_ac(gen_comp_feats, trg_comp_ids)
+            stats.ac_gen_acc.update(acc, trg_comp_ids.numel())
             self.ac_losses['ac_gen'] = loss * self.cfg['ac_gen_w']
 
     def log(self, losses, discs, stats):
@@ -211,4 +211,4 @@ class CombinedTrainer(BaseTrainer):
             "  R_font {D.real_font_acc.avg:7.3f}  F_font {D.fake_font_acc.avg:7.3f}"
             "  R_uni {D.real_uni_acc.avg:7.3f}  F_uni {D.fake_uni_acc.avg:7.3f}"
             "  B_stl {S.B_style.avg:5.1f}  B_trg {S.B_target.avg:5.1f}"
-                .format(step=self.step, L=losses, D=discs, S=stats))
+            .format(step=self.step, L=losses, D=discs, S=stats))

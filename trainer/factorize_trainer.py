@@ -4,7 +4,6 @@ Copyright (c) 2020-present NAVER Corp.
 MIT license
 """
 import torch
-import torch.nn as nn
 
 from .base_trainer import BaseTrainer
 
@@ -196,28 +195,28 @@ class FactorizeTrainer(BaseTrainer):
         self.ac_losses['ac'] = loss * self.cfg['ac_w']
         stats.ac_acc.update(acc, in_comp_ids.numel())
 
-        enc = self.frozen_enc
-        enc.load_state_dict(self.gen.component_encoder.state_dict())
-
-        emb_style = self.frozen_emb_style
-        emb_comp = self.frozen_emb_comp
-        emb_style.load_state_dict(self.gen.emb_style.state_dict())
-        emb_comp.load_state_dict(self.gen.emb_comp.state_dict())
-
-        trg_comp_lens = torch.LongTensor([*map(len, trg_comp_ids)]).cuda()
-        trg_comp_ids = torch.LongTensor([*chain(*trg_comp_ids)]).cuda()
-        generated = generated.repeat_interleave(trg_comp_lens, dim=0)
-
-        feats = enc(generated, trg_comp_ids)
-        gen_feats = feats["last"]
-        gen_emb_style = emb_style(gen_feats.unsqueeze(1))
-        gen_emb_comp = emb_comp(gen_feats.unsqueeze(1))
-
-        gen_recon = (gen_emb_style * gen_emb_comp).sum(1)
-
-        aux_gen_feats, loss, acc = self.infer_ac(gen_recon, trg_comp_ids)
-        stats.ac_gen_acc.update(acc, trg_comp_ids.numel())
         if self.cfg['ac_gen_w'] > 0.:
+            enc = self.frozen_enc
+            enc.load_state_dict(self.gen.component_encoder.state_dict())
+
+            emb_style = self.frozen_emb_style
+            emb_comp = self.frozen_emb_comp
+            emb_style.load_state_dict(self.gen.emb_style.state_dict())
+            emb_comp.load_state_dict(self.gen.emb_comp.state_dict())
+
+            trg_comp_lens = torch.LongTensor([*map(len, trg_comp_ids)]).cuda()
+            trg_comp_ids = torch.LongTensor([*chain(*trg_comp_ids)]).cuda()
+            generated = generated.repeat_interleave(trg_comp_lens, dim=0)
+
+            feats = enc(generated, trg_comp_ids)
+            gen_feats = feats["last"]
+            gen_emb_style = emb_style(gen_feats.unsqueeze(1))
+            gen_emb_comp = emb_comp(gen_feats.unsqueeze(1))
+
+            gen_recon = (gen_emb_style * gen_emb_comp).sum(1)
+
+            aux_gen_feats, loss, acc = self.infer_ac(gen_recon, trg_comp_ids)
+            stats.ac_gen_acc.update(acc, trg_comp_ids.numel())
             self.ac_losses['ac_gen'] = loss * self.cfg['ac_gen_w']
 
     def plot(self, losses):
