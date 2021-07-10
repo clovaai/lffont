@@ -19,7 +19,7 @@ adam_betas: [0.0, 0.9]
 cv_n_unis: 30
 cv_n_fonts: 10
 
-print_freq: 1
-val_freq: 5
-save_freq: 5
-tb_freq: 10
+print_freq: 1000
+val_freq: 10000
+save_freq: 50000
+tb_freq: 100

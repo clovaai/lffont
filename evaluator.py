@@ -69,7 +69,7 @@ class Evaluator:
 
             outs.append(out.detach().cpu())
             if trg_imgs:
-                trgs.append(trg_imgs.detach().cpu())
+                trgs.append(trg_imgs[0].detach().cpu())
 
         ret = (torch.cat(outs).float(),)
         if trgs:
@@ -141,11 +141,11 @@ def eval_ckpt():
     gen = g_cls(1, cfg['C'], 1, **g_kwargs, n_comps=n_comps)
     gen.cuda()
 
-    #  weight = torch.load(args.weight)
-    #  if "generator_ema" in weight:
-        #  weight = weight["generator_ema"]
-    #  gen.load_state_dict(weight)
-    #  logger.info(f"Resumed checkpoint from {args.weight}")
+    weight = torch.load(args.weight)
+    if "generator_ema" in weight:
+        weight = weight["generator_ema"]
+    gen.load_state_dict(weight)
+    logger.info(f"Resumed checkpoint from {args.weight}")
     writer = None
 
     evaluator = Evaluator(env,
