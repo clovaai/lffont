@@ -15,7 +15,7 @@ You can find more related projects on the few-shot font generation at the follow
 
 - [clovaai/dmfont](https://github.com/clovaai/dmfont) (ECCV'20) | [paper](https://arxiv.org/abs/2005.10510)
 - [clovaai/lffont](https://github.com/clovaai/lffont) (AAAI'21) | [paper](https://arxiv.org/abs/2009.11042)
-- [clovaai/mxfont](https://github.com/clovaai/mxfont) (preprint) | [paper](https://arxiv.org/abs/2104.00887)
+- [clovaai/mxfont](https://github.com/clovaai/mxfont) (ICCV'21) | [paper](https://arxiv.org/abs/2104.00887)
 
 ## Introduction
 
