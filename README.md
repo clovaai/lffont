@@ -1,5 +1,7 @@
 # Few-shot Font Generation with Localized Style Representations and Factorization (AAAI 2021)
 
+**NOTICE: We release the unified few-shot font generation repository ([clovaai/fewshot-font-generation](https://github.com/clovaai/fewshot-font-generation)). If you are interested in using our implementation, please visit the unified repository.**
+
 Official PyTorch implementation of LF-Font | [paper](https://arxiv.org/abs/2009.11042)
 
 Song Park<sup>1*</sup>, Sanghyuk Chun<sup>2*</sup>, Junbum Cha<sup>2</sup>,
@@ -16,6 +18,7 @@ You can find more related projects on the few-shot font generation at the follow
 - [clovaai/dmfont](https://github.com/clovaai/dmfont) (ECCV'20) | [paper](https://arxiv.org/abs/2005.10510)
 - [clovaai/lffont](https://github.com/clovaai/lffont) (AAAI'21) | [paper](https://arxiv.org/abs/2009.11042)
 - [clovaai/mxfont](https://github.com/clovaai/mxfont) (ICCV'21) | [paper](https://arxiv.org/abs/2104.00887)
+- [clovaai/fewshot-font-generation](https://github.com/clovaai/fewshot-font-generation) The unified few-shot font generation repository
 
 ## Introduction
 
