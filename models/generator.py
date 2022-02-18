@@ -90,7 +90,7 @@ class Generator(nn.Module):
     def read_memory(self, target_style_ids, target_comp_ids, reset_memory=True,
                     phase="comb", try_comb=False, reduction='mean'):
 
-        if phase == "comb" and try_comb:
+        if phase == "fact" and try_comb:
             phase = "both"
 
         feats = self.memory.read_chars(target_style_ids, target_comp_ids, reduction=reduction, type=phase)
