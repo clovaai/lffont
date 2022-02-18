@@ -124,7 +124,7 @@ class FactMemory:
         char_feat = (style_feat * comp_feat).sum(1)
         return char_feat
 
-    def read_combined(self, style_id, comp_id, reduction='mean'):
+    def read_point(self, style_id, comp_id, reduction='mean'):
         style_feat = self.style.read_point(style_id, reduction)
         comp_feat = self.comp.read_point(comp_id, reduction)
         feat = (style_feat * comp_feat).sum(0)
