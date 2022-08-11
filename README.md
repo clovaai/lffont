@@ -2,7 +2,7 @@
 
 **NOTICE: We release the unified few-shot font generation repository ([clovaai/fewshot-font-generation](https://github.com/clovaai/fewshot-font-generation)). If you are interested in using our implementation, please visit the unified repository.**
 
-Official PyTorch implementation of LF-Font | [paper](https://arxiv.org/abs/2009.11042)
+Official PyTorch implementation of LF-Font | [paper](https://arxiv.org/abs/2009.11042) | [paper (PAMI extension)](https://arxiv.org/abs/2112.11895)
 
 Song Park<sup>1*</sup>, Sanghyuk Chun<sup>2*</sup>, Junbum Cha<sup>2</sup>,
 Bado Lee<sup>2</sup>, Hyunjung Shim<sup>1</sup><br>
@@ -188,5 +188,21 @@ This project is based on [clovaai/dmfont](https://github.com/clovaai/dmfont).
     author={Park, Song and Chun, Sanghyuk and Cha, Junbum and Lee, Bado and Shim, Hyunjung},
     year={2021},
     booktitle={AAAI Conference on Artificial Intelligence},
+}
+
+@article{park2022lffont_extension,
+    author={Park, Song and Chun, Sanghyuk and Cha, Junbum and Lee, Bado and Shim, Hyunjung},
+    journal = {IEEE Transactions on Pattern Analysis &amp; Machine Intelligence},
+    title = {Few-shot Font Generation with Weakly Supervised Localized Representations},
+    year = {5555},
+    volume = {},
+    number = {01},
+    issn = {1939-3539},
+    pages = {1-17},
+    keywords = {},
+    doi = {10.1109/TPAMI.2022.3196675},
+    publisher = {IEEE Computer Society},
+    address = {Los Alamitos, CA, USA},
+    month = {aug}
 }
 ```
